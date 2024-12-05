@@ -1,9 +1,11 @@
 ﻿using DemoApp;
 using Nimiq.RPC;
+using Nimiq.RPC.Models;
+using Nimiq.RPC.Models.Steam;
 
 var client = new WebSocketClient(new Uri("ws://localhost:8648/ws"));
 
-var requestBody = new Request { Method = "subscribeForHeadBlock", Params = [false] };
+var requestBody = new RPCRequest("subscribeForHeadBlock", new object[] { false });
 
 var subscription = await client.Subscribe<Block>(requestBody, CancellationToken.None);
 

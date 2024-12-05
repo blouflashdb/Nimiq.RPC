@@ -1,5 +1,7 @@
 ﻿namespace Nimiq.RPC;
 
+using Nimiq.RPC.Models;
+using Nimiq.RPC.Models.Steam;
 using System;
 using System.Net.WebSockets;
 using System.Text;
@@ -14,67 +16,20 @@ public interface ISubscription<T>
     Task Close();
 }
 
-public class Request
-{
-    public required string Method { get; set; }
-    public required object[] Params { get; set; }
-}
 
-internal class RequestBody
-{
-    [JsonPropertyName("method")]
-    public required string Method { get; set; }
-
-    [JsonPropertyName("params")]
-    public required object[] Params { get; set; }
-
-    [JsonPropertyName("id")]
-    public required int Id { get; set; }
-
-    [JsonPropertyName("jsonrpc")]
-    public required string Jsonrpc { get; set; }
-}
-
-public abstract class StreamResponse<T>
-{
-    public sealed class Success(T? data) : StreamResponse<T>
-    {
-        public T? Data { get; } = data;
-    }
-
-    public sealed class Failure(ErrorStreamReturn? error) : StreamResponse<T>
-    {
-        public ErrorStreamReturn? Error { get; } = error;
-    }
-}
-
-public class ErrorStreamReturn
-{
-    [JsonPropertyName("code")]
-    public int Code { get; set; }
-
-    [JsonPropertyName("message")]
-    public string? Message { get; set; }
-}
 
 public class WebSocketClient(Uri url)
 {
-    private int id = 0;
 
     public async Task<ISubscription<T>> Subscribe<T>(
-        Request request,
+        RPCRequest request,
         CancellationToken cancellationToken
     )
     {
         var ws = new ClientWebSocket();
         await ws.ConnectAsync(url, cancellationToken);
-        var requestBody = new RequestBody
-        {
-            Method = request.Method,
-            Params = request.Params,
-            Jsonrpc = "2.0",
-            Id = id++,
-        };
+        var requestBody = new RPCRequest(request.Method, request.Params);
+   
         var args = new Subscription<T>(ws);
         await ws.SendAsync(
             new ArraySegment<byte>(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(requestBody))),
