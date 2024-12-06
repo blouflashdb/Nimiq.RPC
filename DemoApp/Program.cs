@@ -1,12 +1,8 @@
-﻿using DemoApp;
-using Microsoft.Extensions.Configuration;
-using Nimiq.RPC.Models;
-using Nimiq.RPC.Models.Steam;
+﻿using Nimiq.RPC.Models;
 using Nimiq.RPC.NimiqHttpClient;
-using Nimiq.RPC.NimiqWebSocketClient;
 using System.Text.Json;
 
-
+using Microsoft.Extensions.Configuration;
 
 class Program
 {
@@ -14,12 +10,11 @@ class Program
     {
         // Build configuration
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .SetBasePath(Directory.GetCurrentDirectory())  // Set the base path
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)  // Add the appsettings file
             .Build();
 
-
-         // Get RPC settings from configuration
+        // Get RPC settings from configuration
         var rpcSetting = configuration.GetSection("RPCSettings").Get<RPCSetting>();
 
         //var rpcSetting = new RPCSetting()
@@ -55,13 +50,6 @@ class Program
         //);
 
         //await subscription.Close();
-
-        var rpcSetting = new RPCSetting()
-        {
-            RpcUrl = "http://localhost:8648",
-            Username = "super",
-            Password = "secret"
-        };
 
         var httpClient = new NimiqHttpClient(rpcSetting);
         var httpResponse = httpClient.GetByMethod<JsonElement>("getEpochNumber", new object[] {  });
