@@ -13,7 +13,15 @@ The application reads configuration settings from an `appsettings.json` file and
 
 ## Configuration
 
-The application uses an `appsettings.json` file to store the RPC settings. Create an `appsettings.json` file in the root of your project directory with the following content: { "RPCSettings": { "RpcUrl": "http://localhost:8648", "Username": "super", "Password": "secret" } }
+The application uses an `appsettings.json` file to store the RPC settings. Create an `appsettings.json` file in the root of your project directory with the following content:
+`` 
+{ 
+"RPCSettings": { 
+"RpcUrl": "http://localhost:8648", 
+"Username": "super", 
+"Password": "secret" 
+} 
+}``
 
 Replace the values with your actual RPC URL, username, and password.
 
