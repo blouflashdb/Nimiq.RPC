@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Nimiq.RPC
+namespace Nimiq.RPC.NimiqHttpClient
 {
     public interface INimiqHttpClient
     {
@@ -23,10 +23,10 @@ namespace Nimiq.RPC
         private readonly string _rpcUrl;
 
 
-        public NimiqHttpClient(HttpClient httpClient, RPCSetting rpcSettings)
+        public NimiqHttpClient(RPCSetting rpcSettings)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _rpcUrl = rpcSettings.RpcUrl; 
+            _httpClient = new HttpClient();
+            _rpcUrl = rpcSettings.RpcUrl;
             var byteArray = Encoding.ASCII.GetBytes($"{rpcSettings.Username}:{rpcSettings.Password}");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
