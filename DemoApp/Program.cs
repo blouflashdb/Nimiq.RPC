@@ -58,7 +58,7 @@ class Program
 
         var rpcSetting = new RPCSetting()
         {
-            RpcUrl = "http://validator-test.nimiqpocket.com:8648",
+            RpcUrl = "http://localhost:8648",
             Username = "super",
             Password = "secret"
         };
